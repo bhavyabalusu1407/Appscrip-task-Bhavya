@@ -2,22 +2,23 @@ import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import ProductCard from "../components/ProductCard";
+
+//  Force SSR
 export const dynamic = "force-dynamic";
 
+// SSR fetch
 async function getProducts() {
   try {
     const res = await fetch("https://fakestoreapi.com/products", {
-      next: { revalidate: 0 }, // disable caching
+      cache: "no-store",
     });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch products");
-    }
+    if (!res.ok) throw new Error("Failed");
 
     return await res.json();
   } catch (error) {
-    console.error("API Error:", error);
-    return []; // fallback
+    console.error("SSR Fetch Error:", error);
+    return null; // important
   }
 }
 
@@ -26,26 +27,19 @@ export default async function Home() {
 
   return (
     <main>
-      {/* Header */}
       <Header />
 
-      {/* SEO Title */}
       <h1 style={{ display: "none" }}>Product Listing Page</h1>
 
       <div className={styles.container}>
-        
-        {/* Sidebar */}
         <aside>
           <Sidebar />
         </aside>
 
-        {/* Products Section */}
         <section className={styles.products}>
           <h2 style={{ display: "none" }}>Products</h2>
 
-          {products.length === 0 ? (
-            <p>Loading products...</p>
-          ) : (
+          {products && products.length > 0 ? (
             products.map((item) => (
               <ProductCard
                 key={item.id}
@@ -54,9 +48,10 @@ export default async function Home() {
                 image={item.image}
               />
             ))
+          ) : (
+            <ClientProducts />
           )}
         </section>
-
       </div>
     </main>
   );
