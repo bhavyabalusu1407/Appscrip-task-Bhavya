@@ -3,21 +3,24 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import ProductCard from "../components/ProductCard";
 export const dynamic = "force-dynamic";
-// SSR - Fetch products
+
 async function getProducts() {
   try {
-    const res = await fetch("https://fakestoreapi.com/products");
+    const res = await fetch("https://fakestoreapi.com/products", {
+      next: { revalidate: 0 }, // disable caching
+    });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch");
+      throw new Error("Failed to fetch products");
     }
 
-    return res.json();
+    return await res.json();
   } catch (error) {
-    console.error(error);
-    return [];
+    console.error("API Error:", error);
+    return []; // fallback
   }
 }
+
 export default async function Home() {
   const products = await getProducts();
 
@@ -26,7 +29,7 @@ export default async function Home() {
       {/* Header */}
       <Header />
 
-      {/* Page Title for SEO */}
+      {/* SEO Title */}
       <h1 style={{ display: "none" }}>Product Listing Page</h1>
 
       <div className={styles.container}>
@@ -40,14 +43,18 @@ export default async function Home() {
         <section className={styles.products}>
           <h2 style={{ display: "none" }}>Products</h2>
 
-          {products.map((item) => (
-            <ProductCard
-              key={item.id}
-              title={item.title}
-              price={item.price}
-              image={item.image}   
-            />
-          ))}
+          {products.length === 0 ? (
+            <p>Loading products...</p>
+          ) : (
+            products.map((item) => (
+              <ProductCard
+                key={item.id}
+                title={item.title}
+                price={item.price}
+                image={item.image}
+              />
+            ))
+          )}
         </section>
 
       </div>
