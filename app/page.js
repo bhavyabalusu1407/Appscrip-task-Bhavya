@@ -2,25 +2,22 @@ import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import ProductCard from "../components/ProductCard";
-
+export const dynamic = "force-dynamic";
 // SSR - Fetch products
 async function getProducts() {
   try {
-    const res = await fetch("https://fakestoreapi.com/products", {
-      cache: "no-store",
-    });
+    const res = await fetch("https://fakestoreapi.com/products");
 
     if (!res.ok) {
-      throw new Error("Failed to fetch products");
+      throw new Error("Failed to fetch");
     }
 
     return res.json();
   } catch (error) {
-    console.error("API Error:", error);
-    return []; // fallback
+    console.error(error);
+    return [];
   }
 }
-
 export default async function Home() {
   const products = await getProducts();
 
