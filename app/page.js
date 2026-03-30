@@ -1,52 +1,54 @@
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import ProductCard from "../components/ProductCard";
-
+import ProductCard from "../components/ProductCard"
 export const dynamic = "force-dynamic";
 
-// SSR fetch with timeout + fallback
 async function getProducts() {
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000); // 5 sec timeout
-
     const res = await fetch("https://fakestoreapi.com/products", {
       cache: "no-store",
-      signal: controller.signal,
     });
 
-    clearTimeout(timeout);
-
-    if (!res.ok) {
-      console.error("API response not OK");
-      return [];
-    }
+    if (!res.ok) throw new Error("API failed");
 
     const data = await res.json();
 
-    // Ensure valid array
-    if (!Array.isArray(data)) return [];
+    if (!Array.isArray(data)) throw new Error("Invalid data");
 
     return data;
   } catch (error) {
-    console.error("SSR Fetch Failed:", error);
-    return []; 
+    console.error("SSR API Failed:", error);
+
+    return [
+      {
+        id: 1,
+        title: "Sample Product 1",
+        price: 100,
+        image: "https://via.placeholder.com/200",
+      },
+      {
+        id: 2,
+        title: "Sample Product 2",
+        price: 200,
+        image: "https://via.placeholder.com/200",
+      },
+      {
+        id: 3,
+        title: "Sample Product 3",
+        price: 300,
+        image: "https://via.placeholder.com/200",
+      },
+    ];
   }
 }
 
 export default async function Home() {
-  let products = [];
-
-  try {
-    products = await getProducts();
-  } catch (e) {
-    console.error("Page Error:", e);
-    products = [];
-  }
+  const products = await getProducts();
 
   return (
     <main>
+      {/* Header */}
       <Header />
 
       {/* SEO */}
@@ -63,21 +65,14 @@ export default async function Home() {
         <section className={styles.products}>
           <h2 style={{ display: "none" }}>Products</h2>
 
-          {products.length > 0 ? (
-            products.map((item) => (
-              <ProductCard
-                key={item.id}
-                title={item.title}
-                price={item.price}
-                image={item.image}
-              />
-            ))
-          ) : (
-            <div style={{ padding: "20px" }}>
-              <p>Products could not be loaded.</p>
-              <p>Please try again later.</p>
-            </div>
-          )}
+          {products.map((item) => (
+            <ProductCard
+              key={item.id}
+              title={item.title}
+              price={item.price}
+              image={item.image}
+            />
+          ))}
         </section>
 
       </div>
