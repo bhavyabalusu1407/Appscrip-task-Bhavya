@@ -1,9 +1,12 @@
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import ProductCard from "../components/ProductCard"
+import ProductCard from "../components/ProductCard";
+
+//  Force SSR
 export const dynamic = "force-dynamic";
 
+//  Fetch products with fallback
 async function getProducts() {
   try {
     const res = await fetch("https://fakestoreapi.com/products", {
@@ -20,6 +23,7 @@ async function getProducts() {
   } catch (error) {
     console.error("SSR API Failed:", error);
 
+    //  Fallback static data
     return [
       {
         id: 1,
@@ -61,7 +65,7 @@ export default async function Home() {
           <Sidebar />
         </aside>
 
-        {/* Products */}
+        {/* Products Section */}
         <section className={styles.products}>
           <h2 style={{ display: "none" }}>Products</h2>
 
