@@ -25,23 +25,18 @@ async function getProducts() {
 
     //  Fallback static data
       return [
-  {
+
+        {
     id: 1,
     title: "Sample Product 1",
     price: 100,
-    image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+    image: "/images/p1.png",
   },
   {
     id: 2,
     title: "Sample Product 2",
     price: 200,
-    image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
-  },
-  {
-    id: 3,
-    title: "Sample Product 3",
-    price: 300,
-    image: "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg",
+    image: "/images/p2.png",
   },
 ];
  
