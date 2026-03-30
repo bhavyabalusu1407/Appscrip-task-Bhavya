@@ -24,26 +24,27 @@ async function getProducts() {
     console.error("SSR API Failed:", error);
 
     //  Fallback static data
-    return [
-      {
-        id: 1,
-        title: "Sample Product 1",
-        price: 100,
-        image: "https://via.placeholder.com/200",
-      },
-      {
-        id: 2,
-        title: "Sample Product 2",
-        price: 200,
-        image: "https://via.placeholder.com/200",
-      },
-      {
-        id: 3,
-        title: "Sample Product 3",
-        price: 300,
-        image: "https://via.placeholder.com/200",
-      },
-    ];
+      return [
+  {
+    id: 1,
+    title: "Sample Product 1",
+    price: 100,
+    image: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+  },
+  {
+    id: 2,
+    title: "Sample Product 2",
+    price: 200,
+    image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
+  },
+  {
+    id: 3,
+    title: "Sample Product 3",
+    price: 300,
+    image: "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_.jpg",
+  },
+];
+ 
   }
 }
 
